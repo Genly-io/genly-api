@@ -1,0 +1,20 @@
+{
+  "name": "@genly-api/core",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sst bind vitest",
+    "typecheck": "tsc -noEmit"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.10.1",
+    "sst": "^2.36.7",
+    "vitest": "^0.34.6"
+  },
+  "dependencies": {
+    "aws-lambda": "^1.0.7",
+    "aws-sdk": "^2.1510.0",
+    "zod": "^3.22.4"
+  }
+}
