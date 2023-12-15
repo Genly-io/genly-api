@@ -1,4 +1,4 @@
-import { ApiStack } from "./ApiStack";
+import { ApiStack } from "./apiStacks/ApiStack";
 import * as iam from "aws-cdk-lib/aws-iam";
 import { StorageStack } from "./StorageStack";
 import { Cognito, StackContext, use } from "sst/constructs";

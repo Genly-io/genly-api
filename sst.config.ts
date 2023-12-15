@@ -1,6 +1,6 @@
 import { SSTConfig } from "sst";
 import { StorageStack } from "./stacks/StorageStack";
-import { ApiStack } from "./stacks/ApiStack";
+import { ApiStack } from "./stacks/apiStacks/ApiStack";
 import { AuthStack } from "./stacks/AuthStack";
 
 export default {

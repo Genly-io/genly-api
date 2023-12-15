@@ -8,14 +8,18 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.130",
+    "@types/luxon": "^3.3.7",
     "@types/node": "^20.10.1",
     "@types/uuid": "^9.0.7",
+    "joi": "^17.11.0",
     "sst": "^2.36.7",
     "vitest": "^0.34.6"
   },
   "dependencies": {
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1510.0",
+    "luxon": "^3.4.4",
+    "nanoid": "^5.0.4",
     "stripe": "^14.8.0",
     "uuid": "^9.0.1"
   }

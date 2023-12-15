@@ -8,13 +8,24 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.130",
+    "@types/axios": "^0.14.0",
+    "@types/luxon": "^3.3.7",
     "@types/node": "^20.10.1",
+    "axios": "^1.6.2",
+    "middy": "^0.36.0",
     "sst": "^2.36.7",
     "vitest": "^0.34.6"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.473.0",
+    "@aws-sdk/lib-dynamodb": "^3.473.0",
+    "@aws-sdk/util-dynamodb": "^3.473.0",
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1510.0",
+    "joi": "^17.11.0",
+    "luxon": "^3.4.4",
+    "nanoid": "^5.0.4",
+    "stripe": "^14.8.0",
     "zod": "^3.22.4"
   }
 }

@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { Config } from "sst/node/config";
-import handler from "@genly-api/core/handler";
-import { calculateCost } from "@genly-api/core/cost";
+import handler from "@genly-api/core/src/handler";
+import { calculateCost } from "@genly-api/core/src/cost";
 
 export const main = handler(async (event) => {
   const { storage, source } = JSON.parse(event.body || "{}");

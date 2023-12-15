@@ -1,5 +1,11 @@
 import { Api, Config, StackContext, use } from "sst/constructs";
-import { StorageStack } from "./StorageStack";
+import { StorageStack } from "../StorageStack";
+import userRoutes from "./routes/users";
+import invoiceRoutes from "./routes/invoices";
+import userPreferenceRoutes from "./routes/userPreferences";
+import subscriptionRoutes from "./routes/subscriptions";
+import workspaceRoutes from "./routes/workspaces";
+import paymentMethodRoutes from "./routes/paymentMethods";
 
 export function ApiStack({ stack }: StackContext) {
   const { table } = use(StorageStack);
@@ -20,6 +26,12 @@ export function ApiStack({ stack }: StackContext) {
       "PUT /notes/{id}": "packages/functions/src/update.main",
       "DELETE /notes/{id}": "packages/functions/src/delete.main",
       "POST /billing": "packages/functions/src/billing.main",
+      ...userRoutes,
+      ...userPreferenceRoutes,
+      ...subscriptionRoutes,
+      ...invoiceRoutes,
+      ...workspaceRoutes,
+      ...paymentMethodRoutes,
     },
   });
 
