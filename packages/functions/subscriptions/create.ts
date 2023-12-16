@@ -71,7 +71,7 @@ export const main = handler(async (event) => {
   const remotePriceId = bodyData.remotePriceId;
   const remotePaymentMethodId = bodyData.remotePaymentMethodId;
   const trial = bodyData.trial !== undefined ? bodyData.trial : true;
-
+  console.log("about to get workspace , id=", workspaceId);
   const workspace = await getWorkspace(workspaceId);
   if (
     !workspace ||
@@ -90,18 +90,19 @@ export const main = handler(async (event) => {
   if (trial && workspace.hasHadTrial) {
     throw new BadRequest(`Workspace ${workspaceId} has already had a trial`);
   }
-
+  console.log("about to get stripe price , id=", remotePriceId);
   const stripe = await getStripeClient();
   const stripePrice = await stripe.prices.retrieve(remotePriceId);
 
   if (!stripePrice) {
     throw new BadRequest(`Unknown price id ${remotePriceId}`);
   }
-
+  console.log("about to get remoteCustomerid");
   const now = nowDateTime();
   let remoteCustomerId = user.billing ? user.billing.customerId : null;
-
+  console.log("remoteCustomerId , id=", remoteCustomerId);
   if (!remoteCustomerId) {
+    console.log("about to create stripe customer");
     const stripeCustomer = await createStripeCustomer(stripe, user);
     const couponId =
       stripeCustomer.discount && stripeCustomer.discount.coupon
@@ -116,7 +117,7 @@ export const main = handler(async (event) => {
     if (couponId) {
       userBilling.couponId = couponId;
     }
-
+    console.log(`about to update user with billing ${userBilling}`);
     await updateUser(user, {
       billing: userBilling,
       modified: now.toISO() as string,
@@ -125,19 +126,19 @@ export const main = handler(async (event) => {
 
     remoteCustomerId = stripeCustomer.id;
   }
-
+  console.log(`about to retrieve payment method id=${remotePaymentMethodId}`);
   let paymentMethod: PaymentMethod | undefined;
   if (remotePaymentMethodId) {
     const stripePaymentMethod = await stripe.paymentMethods.retrieve(
       remotePaymentMethodId
     );
-
+    console.log(`got stripe payment method ${stripePaymentMethod}`);
     if (!stripePaymentMethod) {
       throw new BadRequest(
         `Unknown payment method id ${remotePaymentMethodId}`
       );
     }
-
+    console.log(`about to queryPaymentMethodsByUserId id=${user.id}`);
     const existingPaymentMethods = await queryPaymentMethodsByUserId(user.id);
     paymentMethod = existingPaymentMethods.find(
       (candidate) => candidate.remoteId === remotePaymentMethodId
@@ -147,12 +148,14 @@ export const main = handler(async (event) => {
       await stripe.paymentMethods.attach(stripePaymentMethod.id, {
         customer: remoteCustomerId,
       });
-
+      console.log(`about to buildPaymentMethodFromStripePaymentMethod`);
       paymentMethod = buildPaymentMethodFromStripePaymentMethod(
         user,
         stripePaymentMethod
       );
-
+      console.log(
+        `about to createPaymentMethod paymentMethod=${paymentMethod}`
+      );
       await createPaymentMethod(paymentMethod);
     }
   }
@@ -182,7 +185,9 @@ export const main = handler(async (event) => {
       subscriptionCreateParams.cancel_at_period_end = true;
     }
   }
-
+  console.log(
+    `about to create subscriptions subscriptionCreateParams=${subscriptionCreateParams}`
+  );
   const stripeSubscription = await stripe.subscriptions.create(
     subscriptionCreateParams
   );
@@ -244,7 +249,7 @@ export const main = handler(async (event) => {
       subscription.cancelAtPeriodEnd = true;
     }
   }
-
+  console.log(`about to createSubscription subscription=${subscription}`);
   await createSubscription(subscription);
 
   //return [subscription];
