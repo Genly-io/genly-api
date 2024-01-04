@@ -20,12 +20,6 @@ export function ApiStack({ stack }: StackContext) {
     },
     cors: true,
     routes: {
-      "GET /notes": "packages/functions/src/list.main",
-      "GET /notes/{id}": "packages/functions/src/get.main",
-      "POST /notes": "packages/functions/src/create.main",
-      "PUT /notes/{id}": "packages/functions/src/update.main",
-      "DELETE /notes/{id}": "packages/functions/src/delete.main",
-      "POST /billing": "packages/functions/src/billing.main",
       ...userRoutes,
       ...userPreferenceRoutes,
       ...subscriptionRoutes,
@@ -33,6 +27,15 @@ export function ApiStack({ stack }: StackContext) {
       ...workspaceRoutes,
       ...paymentMethodRoutes,
     },
+    /**
+     * 
+      "GET /notes": "packages/functions/src/list.main",
+      "GET /notes/{id}": "packages/functions/src/get.main",
+      "POST /notes": "packages/functions/src/create.main",
+      "PUT /notes/{id}": "packages/functions/src/update.main",
+      "DELETE /notes/{id}": "packages/functions/src/delete.main",
+      "POST /billing": "packages/functions/src/billing.main",
+     */
   });
 
   //Show the API endpoint in the output

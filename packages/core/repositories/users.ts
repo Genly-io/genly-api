@@ -130,13 +130,17 @@ export function isUserDbRecord(record: {
   );
 }
 
-export async function createUser(user: User) {
+/*export async function createUser(user: User) {
   //await simpleDBCall("put", { Item: userToDbRecord(user) });
   const params = {
     TableName: Table.core.tableName,
     Item: userToDbRecord(user),
   };
   await dynamoDb.put(params);
+}*/
+
+export async function createUser(user: User) {
+  await simpleDBCall("put", { Item: userToDbRecord(user) });
 }
 
 export async function getUser(id: string): Promise<User | null> {

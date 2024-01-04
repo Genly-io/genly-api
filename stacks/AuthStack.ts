@@ -2,10 +2,12 @@ import { ApiStack } from "./apiStacks/ApiStack";
 import * as iam from "aws-cdk-lib/aws-iam";
 import { StorageStack } from "./StorageStack";
 import { Cognito, StackContext, use } from "sst/constructs";
+//import { OpenSearchStack } from "./OpenSearchStack";
 
 export function AuthStack({ stack, app }: StackContext) {
   const { api } = use(ApiStack);
   const { bucket } = use(StorageStack);
+  //const { domain } = use(OpenSearchStack);
 
   // Create a Cognito User Pool and Identity Pool
   const auth = new Cognito(stack, "Auth", {
@@ -23,6 +25,7 @@ export function AuthStack({ stack, app }: StackContext) {
         bucket.bucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
       ],
     }),
+    //domain,
   ]);
 
   // Show the auth resources in the output

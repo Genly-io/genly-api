@@ -1,6 +1,6 @@
 //import handler from "@genly-api/core/src/handler";
 //import { getUser,createUser } from "@genly-api/core/services/users";
-import { getUser, createUser } from "@genly-api/core/repositories/users";
+/*import { getUser, createUser } from "@genly-api/core/repositories/users";
 import { DateTime } from "luxon";
 import { User, UserReferralAffiliate } from "@genly-api/core/types/users";
 import { Forbidden, BadRequest } from "@genly-api/core/libs/errors";
@@ -53,8 +53,9 @@ export const main = handler(async (event) => {
   if (!dateTime.isValid) {
     throw new Error(`Invalid time zone: ${timeZone}`);
   }
-
+  console.log("about to check if user existed");
   const existingUser = await getUser(id);
+  console.log("existingUser== ", existingUser);
 
   if (existingUser) {
     throw new BadRequest("You may not create duplicate users");
@@ -71,6 +72,69 @@ export const main = handler(async (event) => {
     modified: now as string,
     modifiedBy: id,
   };
+
+  console.log("about to create new user");
+  await createUser(user);
+  console.log("user created");
+  return JSON.stringify(user);
+});*/
+import handler from "@genly-api/core/src/handler";
+import { getUser, createUser } from "@genly-api/core/repositories/users";
+import { DateTime } from "luxon";
+import { User } from "@genly-api/core/types/users";
+import { Forbidden, BadRequest } from "@genly-api/core/libs/errors";
+
+interface BodyData {
+  email: string;
+  firstName: string;
+  timeZone: string;
+  lastName?: string;
+}
+
+export const main = handler(async (event) => {
+  if (!event.body) {
+    throw new BadRequest("Request body not provided");
+  }
+
+  const bodyData: BodyData = JSON.parse(event.body);
+  const { timeZone } = bodyData;
+  const dateTime = DateTime.local().setZone(timeZone);
+
+  const authProvider =
+    event.requestContext.authorizer?.iam.cognitoIdentity.amr.find((ref) =>
+      ref.includes(":")
+    );
+  if (!authProvider) {
+    throw new Forbidden("Unable to determine authentication provider");
+  }
+
+  const userPoolUserId = authProvider.split(":").pop();
+  if (!userPoolUserId) {
+    throw new Forbidden("Unable to determine user pool user ID");
+  }
+
+  if (!dateTime.isValid) {
+    throw new BadRequest(`Invalid time zone: ${timeZone}`);
+  }
+
+  const existingUser = await getUser(userPoolUserId);
+  if (existingUser) {
+    throw new BadRequest("Duplicate user creation attempt");
+  }
+
+  const now = new Date().toISOString();
+  const user: User = {
+    id: userPoolUserId,
+    email: bodyData.email,
+    firstName: bodyData.firstName,
+    timeZone: bodyData.timeZone,
+    workspaces: {},
+    created: now,
+    createdBy: userPoolUserId,
+    modified: now,
+    modifiedBy: userPoolUserId,
+  };
+
   await createUser(user);
   return JSON.stringify(user);
 });

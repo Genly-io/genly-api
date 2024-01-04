@@ -11,7 +11,12 @@ import { nowISODateString } from "@genly-api/core/libs/utils";
 
 import handler from "@genly-api/core/src/handler";
 
+import { opensearchProcess } from "@genly-api/core/services/documents/documentProcessor";
+
 export const main = handler(async (event) => {
+  opensearchProcess();
+  return JSON.stringify("ZAHIA");
+  /*
   const authProvider =
     event.requestContext.authorizer?.iam.cognitoIdentity.amr.findLast((ref) =>
       ref.includes(":")
@@ -38,22 +43,7 @@ export const main = handler(async (event) => {
     throw new Forbidden("User not logged in", "001");
   }
 
-  /*
-  const params = {
-    TableName: Table.core.tableName,
-    // 'Key' defines the partition key and sort key of
-    // the item to be retrieved
-    Key: {
-      userId: event.requestContext.authorizer?.iam.cognitoIdentity.identityId, // The id of the author
-      noteId: event?.pathParameters?.id, // The id of the note from the path
-    },
-  };
-
-  const result = await dynamoDb.get(params);
-  if (!result.Item) {
-    throw new Error("Item not found.");
-  }*/
 
   // Return the retrieved item
-  return JSON.stringify(user);
+  return JSON.stringify(user);*/
 });

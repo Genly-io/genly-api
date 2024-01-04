@@ -3,7 +3,7 @@ import handler from "@genly-api/core/src/handler";
 import dynamoDb from "@genly-api/core/src/dynamodb";
 
 export const main = handler(async (event) => {
-  const data = JSON.parse(event.body || "{}");
+  /*const data = JSON.parse(event.body || "{}");
 
   const params = {
     TableName: Table.core.tableName,
@@ -25,7 +25,7 @@ export const main = handler(async (event) => {
     ReturnValues: "ALL_NEW",
   };
 
-  await dynamoDb.update(params);
+  await dynamoDb.update(params);*/
 
   return JSON.stringify({ status: true });
 });
